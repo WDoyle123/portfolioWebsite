@@ -16,3 +16,9 @@
     "three": "^0.141.0"
   }
 }
+
+{
+  "scripts": {
+    "deploy": "npm run build && gh-pages -d dist"
+  }
+}
