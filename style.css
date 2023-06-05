@@ -70,6 +70,10 @@ blockquote p {
   grid-column: 6 / 12;
 }
 
+a {
+ color: blue; 
+}
+
 /* Mobile Styles */
 @media screen and (max-width: 768px) {
   :root {
