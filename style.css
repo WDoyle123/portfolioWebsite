@@ -71,8 +71,10 @@ blockquote p {
 }
 
 a {
- color: blue; 
+ color: #9494FF; 
 }
+
+
 
 /* Mobile Styles */
 @media screen and (max-width: 768px) {
