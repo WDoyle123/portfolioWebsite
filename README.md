@@ -11,7 +11,7 @@ Welcome to my personal portfolio website repository. This site showcases my jour
 - Showcase of key projects with links to GitHub repositories.
 - List of publications with external links.
 - Display of certifications in various technical domains.
-- Interactive 3D visualization using THREE.js.
+- Interactive 3D visualisation using THREE.js.
 
 ## Built With
 - HTML & CSS - For the website structure and styling.
