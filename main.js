@@ -1,139 +1,125 @@
-import './style.css'
-
+import './style.css';
 import * as THREE from 'three';
+import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 
-import {OrbitControls} from 'three/examples/jsm/controls/OrbitControls';
-import { Sphere } from 'three';
+// Disclaimer: This is a simplified version of the solar system
+// Scale is compeletly off but everything would be tiny and slow otherwise!
 
-const scene = new THREE.Scene();
+// Function to handle window resize
+function onWindowResize() {
+    // Update camera aspect ratio and projection matrix
+    camera.aspect = window.innerWidth / window.innerHeight;
+    camera.updateProjectionMatrix();
 
-const camera = new THREE.PerspectiveCamera(75, window.innerWidth/window.innerHeight, 0.1, 1000);
-
-const renderer = new THREE.WebGLRenderer({
-  canvas: document.querySelector('#bg'),
-});
-document.body.appendChild( renderer.domElement );
-
-renderer.setPixelRatio(window.devicePixelRatio);
-renderer.setSize(window.innerWidth,window.innerHeight);
-
-camera.position.setZ(50);
-camera.position.setX(150);
-camera.position.setY(120);
-
-
-renderer.render(scene,camera);
-
-//Lights and Helper
-
-const pointLight = new THREE.PointLight(0xffffff)
-pointLight.position.set(20,0,-200)
-
-const ambientLight = new THREE.AmbientLight(0xffffff);
-scene.add(pointLight,ambientLight)
-
-const lightHelper = new THREE.PointLightHelper(pointLight)
-const gridHelper = new THREE.GridHelper(200.50);
-scene.add(lightHelper)
-
-const controls = new OrbitControls(camera, renderer.domElement);
-
-//Stars
-
-function addStar(){
-  const geometry = new THREE.SphereGeometry(0.5,24,24);
-  const material = new THREE.MeshStandardMaterial({color: 0xffffff})
-  const star = new THREE.Mesh (geometry,material);
-
-  const [x,y,z] = Array(3).fill().map(() => THREE.MathUtils.randFloatSpread(1500));
-
-  star.position.set(x,y,z);
-  scene.add(star)
+    // Update renderer size
+    renderer.setSize(window.innerWidth, window.innerHeight);
 }
 
-Array(1500).fill().forEach(addStar)
+// Functions
+function addStar() {
+  const geometry = new THREE.SphereGeometry(1., 24, 24);
+  const material = new THREE.MeshStandardMaterial({ color: 0xffffff });
 
-//Background
+  const star = new THREE.Mesh(geometry, material);
+  
+  // Stops stars from spawning too close 
+  let x, y, z;
+  do {
+    x = THREE.MathUtils.randFloatSpread(1500);
+    y = THREE.MathUtils.randFloatSpread(1500);
+    z = THREE.MathUtils.randFloatSpread(1500);
+  } while (x*x + y*y + z*z < 500000);
 
-const spaceTexture = new THREE.TextureLoader().load('black.jpg');
-scene.background = spaceTexture;
+  star.position.set(x, y, z);
+  scene.add(star);
+}
 
-//Sun
-
-const sunTexture = new THREE.TextureLoader().load('sun.jpg')
-
-const sun = new THREE.Mesh(
-  new THREE.SphereGeometry(80,32,32),
-  new THREE.MeshStandardMaterial({
-    map:sunTexture,
-  })
-)
-sun.position.set(400,0,-1000)
-scene.add(sun)
-
-//Earth
-
-const earthTexture = new THREE.TextureLoader().load('earth.jpg');
-
-const earth = new THREE.Mesh(
-  new THREE.SphereGeometry(5,32,32),
-  new THREE.MeshStandardMaterial({
-    map:earthTexture,
-  })
-);
-earth.position.set(20,0,0);
-scene.add(earth)
-
-//Moon
-
-const moonTexture = new THREE.TextureLoader().load('moon.jpg');
-
-const moon = new THREE.Mesh(
-  new THREE.SphereGeometry(1,32,32),
-  new THREE.MeshStandardMaterial({
-    map:moonTexture,
-  })
-);
-moon.position.set(50,0,-20);
-scene.add(moon);
-
-//Moon Orbit
-
-
-
-
-//Scroll
 function moveCamera() {
-   const t = document.body.getBoundingClientRect().top
-  
-  
-
+  const t = document.body.getBoundingClientRect().top;
   camera.position.y = t * -0.025;
-  camera.position.x = t * -0.075;
-  //.rotation.y = t * -0.05;
+  camera.position.x = t * 0.1;
+  //camera.position.z = t * 0.050;
+  camera.lookAt(new THREE.Vector3(0, 0, 0));
+
 }
-
-
-document.body.onscroll = moveCamera;
-moveCamera();
 
 function animate() {
   requestAnimationFrame(animate);
 
-  earth.rotation.y +=0.0008
-  moon.rotation.y +=0.001
-  sun.rotation.y += 0.00003
+  const delta = 0.0008; 
+  elapsedTime += delta;
 
-  moon.position.x += -0.001
-  moon.position.z += -0.001
-  
-  
-  
-   controls.update();
+  // Moon's orbit
+  const moonOrbitRadius = 40;
+  moon.position.x = (earth.position.x + moonOrbitRadius * Math.cos(elapsedTime));
+  moon.position.z = earth.position.z - moonOrbitRadius * Math.sin(elapsedTime);
 
+  earth.rotation.y += 0.0008;
+  moon.rotation.y += 0.001;
+  sun.rotation.y += 0.0003;
+  camera.lookAt(new THREE.Vector3(0, 0, 0));
+  controls.update();
   renderer.render(scene, camera);
 }
 
+// Scene setup
+const scene = new THREE.Scene();
+const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 5000);
+const renderer = new THREE.WebGLRenderer({ canvas: document.querySelector('#bg') });
 
+// Renderer configuration
+document.body.appendChild(renderer.domElement);
+renderer.setPixelRatio(window.devicePixelRatio);
+renderer.setSize(window.innerWidth, window.innerHeight);
 
+let elapsedTime = 0;
+
+// Lighting
+const pointLight = new THREE.PointLight(0xffffff);
+pointLight.position.set(120, 80, -470);
+const ambientLight = new THREE.AmbientLight(0xffffff);
+scene.add(pointLight, ambientLight);
+
+// Helpers
+const lightHelper = new THREE.PointLightHelper(pointLight);
+scene.add(lightHelper);
+
+// Controls
+const controls = new OrbitControls(camera, renderer.domElement);
+
+// Background
+const spaceTexture = new THREE.TextureLoader().load('black.jpg');
+scene.background = spaceTexture;
+
+// Celestial objects
+const sunTexture = new THREE.TextureLoader().load('sun.jpg');
+const earthTexture = new THREE.TextureLoader().load('earth.jpg');
+const moonTexture = new THREE.TextureLoader().load('moon.jpg');
+
+const sun = new THREE.Mesh(new THREE.SphereGeometry(80, 32, 32), new THREE.MeshStandardMaterial({ map: sunTexture }));
+sun.position.set(180, 80, -600);
+scene.add(sun);
+
+const earth = new THREE.Mesh(new THREE.SphereGeometry(18, 32, 32), new THREE.MeshStandardMaterial({ map: earthTexture }));
+earth.position.set(60, 0, 400);
+scene.add(earth);
+
+const moon = new THREE.Mesh(new THREE.SphereGeometry(2, 32, 32), new THREE.MeshStandardMaterial({ map: moonTexture }));
+moon.position.set(100, 0, 300);
+scene.add(moon);
+
+// Add event listener for window resize
+window.addEventListener('resize', onWindowResize, false);
+
+// Camera setup
+camera.position.set(300, -200, 500);
+controls.target.copy(new THREE.Vector3(0, 0, 0)); 
+camera.lookAt(new THREE.Vector3(0, 0, 0));
+
+// Event listeners
+document.body.onscroll = moveCamera;
+moveCamera();
+
+// Star generation and animation
+Array(1000).fill().forEach(addStar);
 animate();
