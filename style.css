@@ -106,7 +106,21 @@ table a {
   text-decoration: none;
 }
 
+.clickable {
+  cursor: pointer;
+  position: relative;
+}
 
+.sort-arrow {
+  font-size: 12px;
+  margin-left: 5px;
+  display: inline-block;
+  transition: transform 0.3s ease;
+}
+
+.th-sort-asc .sort-arrow {
+  transform: rotate(180deg);
+}
 
 /* Mobile Styles */
 @media screen and (max-width: 768px) {

@@ -36,7 +36,7 @@
 
       <section>
 	      <h2>🛠️ <a href=https://github.com/WDoyle123>GitHub</a> Projects</h2>
-    <table border="0">
+    <table>
         <thead>
             <tr>
                 <th>Title</th>
@@ -134,51 +134,50 @@
 
  	<section>
 	  <h2> 📜 Certificates</h2>
-  
-	  <table>
+	  <table id='coursesTable'>
 	    <thead>
-	      <tr>
-	        <th>Course</th>
-	        <th>Provider</th>
-	        <th>Specialisation</th>
-	      </tr>
+		<tr>
+		  <th class='clickable' id='courseName'>Course <span class="sort-arrow">&#9660;</span></th>
+		  <th class='clickable' id='provider'>Provider <span class="sort-arrow">&#9660;</span></th>
+		  <th class='clickable' id='specialisation'>Specialisation <span class="sort-arrow">&#9660;</span></th>
+		</tr>
 	    </thead>
 	    <tbody>
 	      <!-- Machine Learning Courses -->
 	      <tr>
 		<td><a href='https://coursera.org/share/d965ccf7e7cb84cd72eb20b8257b48e0'>DeepLearning.AI TensorFlow Developer</a></td>
 	        <td>Coursera</td>
-	        <td>TensorFlow, Machine Learning, Python</td>
+	        <td>Python, TensorFlow, Machine Learning</td>
 	      </tr>
 	      <tr>
 	    	<td><a href='https://coursera.org/share/b76a7f747dc0e7457103cce5702367a9'>Sequences, Time Series and Prediction</a></td>
 	        <td>Coursera</td>
-	        <td>TensorFlow, Machine Learning, Python</td>
+	        <td>Python, TensorFlow, Machine Learning</td>
 	      </tr>
 	      <tr>
 	    	<td><a href="https://coursera.org/share/4aa409c01c391c03abdcca6f6622021d">Natural Language Processing in TensorFlow</a></td>
 	        <td>Coursera</td>
-	        <td>TensorFlow, Machine Learning, Python</td>
+	        <td>Python, TensorFlow, Machine Learning</td>
 	      </tr>
 	      <tr>
 	      <td><a href="https://coursera.org/share/9e5b703495fe4c403d37b568004cd5dd">Convolutional Neural Networks in TensorFlow</a></td>
 	        <td>Coursera</td>
-	        <td>TensorFlow, Machine Learning, Python</td>
+	        <td>Python, TensorFlow, Machine Learning</td>
 	      </tr>
 	      <tr>
 	    	<td><a href="https://coursera.org/share/ee28b20c961bb3c4a6aa59ab1fbff8e7">Introduction to TensorFlow for Artificial Intelligence, Machine Learning, and Deep Learning</a></td>
 	        <td>Coursera</td>
-	        <td>TensorFlow, Machine Learning, Python</td>
+	        <td>Python, TensorFlow, Machine Learning</td>
 	      </tr>
 	      <tr>
 	    	<td><a href="https://www.kaggle.com/learn/certification/wdoyle123/intermediate-machine-learning">Intermediate Machine Learning</a></td>
 	        <td>Kaggle</td>
-	        <td>Machine Learning, Python</td>
+	        <td>Python, Machine Learning</td>
 	      </tr>
 	      <tr>
 	    	<td><a href="https://www.kaggle.com/learn/certification/wdoyle123/intro-to-machine-learning">Intro to Machine Learning</a></td>
 	        <td>Kaggle</td>
-	        <td>Machine Learning, Python</td>
+	        <td>Python, Machine Learning</td>
 	      </tr>
 
 	      <!-- SQL Courses -->
@@ -241,6 +240,7 @@
     </main>
 
     <script type="module" src="/main.js"></script>
+    <script type="module" src="/utils.js"></script>
 
   </body>
 </html>
