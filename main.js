@@ -63,12 +63,12 @@ scene.background = spaceTexture;
 const sunTexture = new THREE.TextureLoader().load('sun.jpg')
 
 const sun = new THREE.Mesh(
-  new THREE.SphereGeometry(100,32,32),
+  new THREE.SphereGeometry(80,32,32),
   new THREE.MeshStandardMaterial({
     map:sunTexture,
   })
 )
-sun.position.set(-800,0,-800)
+sun.position.set(20,0,-1000)
 scene.add(sun)
 
 //Earth
