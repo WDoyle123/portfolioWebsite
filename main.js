@@ -27,7 +27,7 @@ renderer.render(scene,camera);
 //Lights and Helper
 
 const pointLight = new THREE.PointLight(0xffffff)
-pointLight.position.set(100,0,-200)
+pointLight.position.set(-200,0,-200)
 
 const ambientLight = new THREE.AmbientLight(0xffffff);
 scene.add(pointLight,ambientLight)
@@ -68,7 +68,7 @@ const sun = new THREE.Mesh(
     map:sunTexture,
   })
 )
-sun.position.set(200,0,-1000)
+sun.position.set(1000,0,-1000)
 scene.add(sun)
 
 //Earth
