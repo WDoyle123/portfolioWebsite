@@ -68,7 +68,7 @@ const sun = new THREE.Mesh(
     map:sunTexture,
   })
 )
-sun.position.set(1000,0,-1000)
+sun.position.set(-800,0,-800)
 scene.add(sun)
 
 //Earth
