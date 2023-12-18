@@ -1,3 +1,10 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+
 canvas {
   position: fixed;
   top: 0;
@@ -154,15 +161,19 @@ table a {
   .left {
     grid-column: 1 / -1;
   }
-    table {
-    font-size: 0.9rem;
+
+  table {
+    font-size: 0.7rem; /* slightly smaller font for mobile */
+    display: block; /* make table block to allow horizontal scrolling */
+    overflow-x: auto; /* horizontal scroll */
   }
 
   table th, table td {
-    padding: 0.5rem;
+    padding: 0.4rem; /* smaller padding for mobile */
   }
 
+
   table td img {
-    height: 20px; /* Adjust as needed for mobile */
+    height: 15px; /* Adjust as needed for mobile */
   }
 }
