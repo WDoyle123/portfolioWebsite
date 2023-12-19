@@ -31,7 +31,7 @@ main {
   padding: 120px 0px;
   
   display: grid;
-  grid-template-columns: repeat(12, 1fr);
+  grid-template-columns: repeat(24, 1fr);
 }
 
 h1, h2, h3, blockquote {
@@ -48,19 +48,21 @@ h2 a {
 
 header {
   background: var(--dark-bg);
-  grid-column: 2 / span 5;
+  grid-column: 2 / span 12;
   font-size: 2.5rem;
   padding: 2rem;
   margin-bottom: var(--spacing);
+  max-width: 800px;
 }
 
 section {
-  grid-column: 2 / span 5;
+  grid-column: 2 / span 12;
   padding: 1rem;
   background: var(--dark-bg);
   font-size: 1.25rem;
   line-height: 1.5;
   margin-bottom: var(--spacing);
+  max-width:800px;
 }
 
 blockquote {
@@ -91,6 +93,9 @@ table {
   border-collapse: collapse;
   background: var(--dark-bg);
   color: white;
+  overflow-x: auto; /* horizontal scroll */
+  font-size: 1rem;
+
 }
 
 table th, table td {
@@ -128,6 +133,26 @@ table a {
   transform: rotate(180deg);
 }
 
+/* Responsive Design for larger screens (larger than 768px but smaller than 1376px) */
+@media screen and (min-width: 769px) and (max-width: 1376px) {
+  table {
+    font-size: 1.0rem; /* Adjust font size for medium screens */
+  }
+
+  table th, table td {
+    padding: 0.5rem; /* Adjust padding for medium screens */
+  }
+
+  header {
+  grid-column: 2 / span 14;
+  }
+
+  section {
+  grid-column: 2 / span 14;
+  }
+}
+
+
 /* Mobile Styles */
 @media screen and (max-width: 768px) {
   :root {
@@ -162,7 +187,7 @@ table a {
   }
 
   table {
-    font-size: 0.7rem; /* slightly smaller font for mobile */
+    font-size: 0.9rem; /* slightly smaller font for mobile */
     display: block; /* make table block to allow horizontal scrolling */
     overflow-x: auto; /* horizontal scroll */
   }
