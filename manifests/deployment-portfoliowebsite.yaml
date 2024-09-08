@@ -1,0 +1,23 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: portfolio-website-deployment
+  namespace: portfolio-website
+  labels:
+    app: portfolio-website
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: portfolio-website
+  template:
+    metadata:
+      labels:
+        app: portfolio-website
+    spec:
+      containers:
+      - name: portfolio-website
+        image: wdoyle123/portfolio-website:latest
+        ports:
+        - containerPort: 3000
+
