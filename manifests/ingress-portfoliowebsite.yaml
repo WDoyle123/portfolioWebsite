@@ -5,7 +5,14 @@ metadata:
   namespace: portfolio-website
   annotations:
     nginx.ingress.kubernetes.io/rewrite-target: /
+    cert-manager.io/cluster-issuer: letsencrypt-production
 spec:
+  ingressClassName: nginx  # Add this line
+  tls:
+  - hosts:
+    - williamdoyle.co.uk
+    - www.williamdoyle.co.uk
+    secretName: portfolio-website-tls
   rules:
   - host: williamdoyle.co.uk
     http:
@@ -16,5 +23,14 @@ spec:
           service:
             name: portfolio-website-service
             port:
-              number: 3000
-
+              number: 80
+  - host: www.williamdoyle.co.uk
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: portfolio-website-service
+            port:
+              number: 80

@@ -3,15 +3,14 @@ kind: Service
 metadata:
   name: portfolio-website-service
   namespace: portfolio-website
-  labels:
-    app: portfolio-website
 spec:
-  type: ClusterIP
-  ports:
-    - port: 3000
-      targetPort: 3000
-      protocol: TCP
-      name: http
   selector:
     app: portfolio-website
+  ports:
+    - protocol: TCP
+      name: http
+      port: 80        
+      targetPort: 3000
+      nodePort: 30081  
+  type: NodePort  
 
