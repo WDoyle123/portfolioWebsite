@@ -1,3 +1,4 @@
+/* Global Styles */
 * {
   margin: 0;
   padding: 0;
@@ -13,7 +14,8 @@ canvas {
 }
 
 :root {
-  --dark-bg: rgba(15, 15, 15, 0.95);
+  --dark-bg: rgba(15, 15, 15, 0.85); /* Slightly increased transparency */
+  --dark-bg-gradient: linear-gradient(135deg, rgba(15, 15, 15, 0.85), rgba(30, 30, 30, 0.85));
   --spacing: 350px;
 
   font-family: brandon-grotesque, sans-serif;
@@ -26,53 +28,64 @@ main {
   color: white;
   z-index: 99;
   position: absolute;
-  width: 100%;
-  margin: 0px auto;
+  margin: 0 auto;
   padding: 120px 0px;
-  
   display: grid;
   grid-template-columns: repeat(24, 1fr);
 }
 
-h1, h2, h3, blockquote {
+h1,
+h2,
+h3,
+blockquote {
   font-family: elevon, sans-serif;
   font-weight: 700;
   font-style: normal;
   text-decoration: none;
 }
 
-h2 a {
-  text-decoration: none;
+h2 {
+  font-size: 2rem;
+  margin-bottom: 1.5rem;
+}
 
+a {
+  color: #9494FF;
+  text-decoration: none;
 }
 
 header {
-  background: var(--dark-bg);
+  background: var(--dark-bg-gradient);
   grid-column: 2 / span 12;
   font-size: 2.5rem;
   padding: 2rem;
   margin-bottom: var(--spacing);
   max-width: 800px;
+  border: 1px solid rgba(255, 255, 255, 0.1); /* Subtle border */
+  border-radius: 8px; /* Rounded corners */
 }
 
 section {
   grid-column: 2 / span 12;
   padding: 1rem;
-  background: var(--dark-bg);
+  background: var(--dark-bg-gradient);
   font-size: 1.25rem;
   line-height: 1.5;
   margin-bottom: var(--spacing);
-  max-width:800px;
+  max-width: 800px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
 }
 
-blockquote {
+/* Blockquote */
+.blockquote {
   margin: 0;
   padding: 0;
   grid-column: 2 / span 4;
   margin-bottom: var(--spacing);
 }
 
-blockquote p {
+.blockquote p {
   color: black;
   background-color: white;
   font-size: 4rem;
@@ -80,78 +93,144 @@ blockquote p {
   line-height: 1;
 }
 
+/* Left alignment */
 .left {
   grid-column: 6 / 12;
 }
 
-a {
- color: #9494FF; 
+/* Global Card Styles */
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1.5rem;
 }
 
-table {
-  width: 100%;
-  border-collapse: collapse;
-  background: var(--dark-bg);
-  color: white;
-  overflow-x: auto; /* horizontal scroll */
-  font-size: 1rem;
-
+.card {
+  position: relative;
+  background-color: var(--dark-bg);
+  padding: 1.5rem;
+  border-radius: 8px;
+  color: #fff;
+  transition: transform 0.2s;
+  border: 1px solid #444;
 }
 
-table th, table td {
-  text-align: left;
-  padding: 0.75rem;
+.card:hover {
+  transform: translateY(-5px);
+  border-color: #9494FF;
 }
 
-table th {
-  font-weight: 700;
-  background-color: rgba(20, 20, 20, 0.9);
-}
-
-table td img {
-  height: 20px; /* Adjust as needed */
-}
-
-table a {
-  color: #9494FF;
+.card a {
+  display: block;
+  height: 100%;
+  color: inherit;
   text-decoration: none;
 }
 
-.clickable {
+.card h4 {
+  margin-bottom: 0.75rem;
+  font-size: 1.25rem;
+  color: #9494FF;
+}
+
+.card p {
+  margin-bottom: 1rem;
+  font-size: 1rem;
+  line-height: 1.5;
+  color: #ccc;
+}
+
+/* Projects Section */
+.projects-section {
+  padding: 1rem;
+}
+
+.projects-section h2 {
+  margin-bottom: 1.5rem;
+}
+
+/* Project details */
+.project-details {
+  font-size: 0.9rem;
+  color: #ccc;
+}
+
+.project-details span {
+  display: block;
+  margin-bottom: 0.5rem;
+}
+
+.project-details img {
+  vertical-align: middle;
+}
+
+/* Publications Section */
+.publications-section {
+  padding: 1rem;
+}
+
+.publications-section h2 {
+  margin-bottom: 1.5rem;
+}
+
+/* Details and Summary Styling */
+details,
+summary {
+  margin: 0;
+  padding: 0;
+}
+
+details:not([open]) {
+  margin-bottom: 0rem;
+}
+
+details[open] {
+  margin-bottom: 2rem;
+}
+
+details:not([open]) summary {
+  margin-bottom: 0rem;
+}
+
+details[open] summary {
+  margin-bottom: 1rem;
+}
+
+summary {
+  font-size: 1.5rem;
   cursor: pointer;
   position: relative;
+  list-style: none;
 }
 
-.sort-arrow {
-  font-size: 12px;
-  margin-left: 5px;
-  display: inline-block;
-  transition: transform 0.3s ease;
+/* Hide default marker */
+summary::-webkit-details-marker {
+  display: none;
 }
 
-.th-sort-asc .sort-arrow {
+/* Custom arrow */
+summary::after {
+  content: '▼';
+  position: absolute;
+  right: 0;
+  font-size: 1rem;
+  transition: transform 0.3s;
+}
+
+details[open] summary::after {
   transform: rotate(180deg);
 }
 
 /* Responsive Design for larger screens (larger than 768px but smaller than 1376px) */
 @media screen and (min-width: 769px) and (max-width: 1376px) {
-  table {
-    font-size: 1.0rem; /* Adjust font size for medium screens */
-  }
-
-  table th, table td {
-    padding: 0.5rem; /* Adjust padding for medium screens */
-  }
-
   header {
-  grid-column: 2 / span 14;
+    grid-column: 2 / span 14;
   }
 
   section {
-  grid-column: 2 / span 14;
+    grid-column: 2 / span 14;
   }
 }
-
 
 /* Mobile Styles */
 @media screen and (max-width: 768px) {
@@ -174,30 +253,91 @@ table a {
     font-size: 1rem;
   }
 
-  blockquote {
-    grid-column: 1 / -1;
-  }
-
-  blockquote p {
-    font-size: 2.5rem;
-  }
-
   .left {
     grid-column: 1 / -1;
   }
 
-  table {
-    font-size: 0.9rem; /* slightly smaller font for mobile */
-    display: block; /* make table block to allow horizontal scrolling */
-    overflow-x: auto; /* horizontal scroll */
-  }
-
-  table th, table td {
-    padding: 0.4rem; /* smaller padding for mobile */
-  }
-
-
-  table td img {
-    height: 15px; /* Adjust as needed for mobile */
+  .card-grid {
+    grid-template-columns: 1fr;
   }
 }
+
+/* Certificates Section */
+.certificates-section {
+  padding: 1rem;
+}
+
+.certificates-section h2 {
+  font-size: 2rem;
+  margin-bottom: 1.5rem;
+}
+
+.certificates-section details {
+  margin-bottom: 1rem;
+}
+
+/* Hide default marker */
+.certificates-section summary {
+  font-size: 1.5rem;
+  cursor: pointer;
+  color: #fff;
+  position: relative;
+  list-style: none;
+}
+
+.certificates-section summary::-webkit-details-marker {
+  display: none;
+}
+
+/* Custom arrow */
+.certificates-section summary::after {
+  content: '▼';
+  position: absolute;
+  right: 0;
+  font-size: 1rem;
+  transition: transform 0.3s;
+}
+
+details[open] summary::after {
+  transform: rotate(180deg);
+}
+
+.certificate-list {
+  list-style: none;
+  padding-left: 0;
+  margin-top: 1rem;
+}
+
+.certificate-list li {
+  margin-bottom: 1rem;
+  background-color: var(--dark-bg);
+  border: 1px solid #444;
+  border-radius: 8px;
+  transition: transform 0.2s;
+  overflow: hidden;
+}
+
+.certificate-list li:hover {
+  transform: translateY(-5px);
+  border-color: #9494FF;
+}
+
+.certificate-list a {
+  display: block;
+  width: 100%;
+  height: 100%;
+  padding: 1rem;
+  color: #fff;
+  text-decoration: none;
+}
+
+.certificate-list a:hover {
+  text-decoration: none;
+}
+
+@media screen and (max-width: 768px) {
+  .certificates-section {
+    padding: 1rem 0.5rem;
+  }
+}
+
