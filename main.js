@@ -1,91 +1,31 @@
 import './style.css';
 import * as THREE from 'three';
-import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
-
-// Disclaimer: This is a simplified version of the solar system
-// Scale is compeletly off but everything would be tiny and slow otherwise!
-
-// Function to handle window resize
-function onWindowResize() {
-    // Update camera aspect ratio and projection matrix
-    camera.aspect = window.innerWidth / window.innerHeight;
-    camera.updateProjectionMatrix();
-
-    // Update renderer size
-    renderer.setSize(window.innerWidth, window.innerHeight);
-}
-
-// Functions
-function addStar() {
-  const geometry = new THREE.SphereGeometry(1., 24, 24);
-  const material = new THREE.MeshStandardMaterial({ color: 0xffffff });
-
-  const star = new THREE.Mesh(geometry, material);
-  
-  // Stops stars from spawning too close 
-  let x, y, z;
-  do {
-    x = THREE.MathUtils.randFloatSpread(1500);
-    y = THREE.MathUtils.randFloatSpread(1500);
-    z = THREE.MathUtils.randFloatSpread(1500);
-  } while (x*x + y*y + z*z < 500000);
-
-  star.position.set(x, y, z);
-  scene.add(star);
-}
-
-function moveCamera() {
-  const t = document.body.getBoundingClientRect().top;
-  camera.position.y = t * -0.025;
-  camera.position.x = t * 0.1;
-  //camera.position.z = t * 0.050;
-  camera.lookAt(new THREE.Vector3(0, 0, 0));
-
-}
-
-function animate() {
-  requestAnimationFrame(animate);
-
-  const delta = 0.0008; 
-  elapsedTime += delta;
-
-  // Moon's orbit
-  const moonOrbitRadius = 40;
-  moon.position.x = (earth.position.x + moonOrbitRadius * Math.cos(elapsedTime));
-  moon.position.z = earth.position.z - moonOrbitRadius * Math.sin(elapsedTime);
-
-  earth.rotation.y += 0.0008;
-  moon.rotation.y += 0.001;
-  sun.rotation.y += 0.0003;
-  camera.lookAt(new THREE.Vector3(0, 0, 0));
-  controls.update();
-  renderer.render(scene, camera);
-}
 
 // Scene setup
 const scene = new THREE.Scene();
-const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 5000);
-const renderer = new THREE.WebGLRenderer({ canvas: document.querySelector('#bg') });
+
+// Adjusted camera parameters
+const camera = new THREE.PerspectiveCamera(
+  75, window.innerWidth / window.innerHeight, 1, 10000
+);
+
+const renderer = new THREE.WebGLRenderer({
+  canvas: document.querySelector('#bg'),
+  antialias: true
+});
 
 // Renderer configuration
-document.body.appendChild(renderer.domElement);
 renderer.setPixelRatio(window.devicePixelRatio);
 renderer.setSize(window.innerWidth, window.innerHeight);
 
+document.body.appendChild(renderer.domElement);
+
 let elapsedTime = 0;
+let scrollPercent = 0; 
 
 // Lighting
-const pointLight = new THREE.PointLight(0xffffff);
-pointLight.position.set(120, 80, -470);
-const ambientLight = new THREE.AmbientLight(0xffffff);
-scene.add(pointLight, ambientLight);
-
-// Helpers
-const lightHelper = new THREE.PointLightHelper(pointLight);
-scene.add(lightHelper);
-
-// Controls
-const controls = new OrbitControls(camera, renderer.domElement);
+const ambientLight = new THREE.AmbientLight(0xffffff, 0.1); 
+scene.add(ambientLight);
 
 // Background
 const spaceTexture = new THREE.TextureLoader().load('black.jpg');
@@ -96,30 +36,151 @@ const sunTexture = new THREE.TextureLoader().load('sun.jpg');
 const earthTexture = new THREE.TextureLoader().load('earth.jpg');
 const moonTexture = new THREE.TextureLoader().load('moon.jpg');
 
-const sun = new THREE.Mesh(new THREE.SphereGeometry(80, 32, 32), new THREE.MeshStandardMaterial({ map: sunTexture }));
-sun.position.set(180, 80, -600);
+// Sun material with emissiveMap and adjusted emissiveIntensity
+const sunMaterial = new THREE.MeshStandardMaterial({
+  map: sunTexture,
+  emissiveMap: sunTexture,
+  emissive: new THREE.Color(0xffffff),
+  emissiveIntensity: 2 
+});
+
+const sun = new THREE.Mesh(
+  new THREE.SphereGeometry(80, 32, 32),
+  sunMaterial
+);
+sun.position.set(10, 30, -200);
 scene.add(sun);
 
-const earth = new THREE.Mesh(new THREE.SphereGeometry(18, 32, 32), new THREE.MeshStandardMaterial({ map: earthTexture }));
-earth.position.set(60, 0, 400);
+// Create a point light at the sun's position
+const sunLight = new THREE.PointLight(0xffffff, 2, 0); 
+sunLight.position.copy(sun.position);
+scene.add(sunLight);
+
+const earth = new THREE.Mesh(
+  new THREE.SphereGeometry(18, 32, 32),
+  new THREE.MeshStandardMaterial({ map: earthTexture })
+);
+earth.position.set(-150, 70, -1000);
 scene.add(earth);
 
-const moon = new THREE.Mesh(new THREE.SphereGeometry(2, 32, 32), new THREE.MeshStandardMaterial({ map: moonTexture }));
-moon.position.set(100, 0, 300);
+const moon = new THREE.Mesh(
+  new THREE.SphereGeometry(2, 32, 32),
+  new THREE.MeshStandardMaterial({ map: moonTexture })
+);
+moon.position.set(120, earth.position.y, 300);
 scene.add(moon);
+
+// Star generation using Points
+const starGeometry = new THREE.BufferGeometry();
+const starMaterial = new THREE.PointsMaterial({
+  color: 0xffffff,
+  size: 2,
+  sizeAttenuation: false
+});
+
+// Create an array to hold positions
+const starVertices = [];
+
+// Number of stars
+const numStars = 2500;
+
+// Generate stars in a sphere
+const radius = 5000;
+
+for (let i = 0; i < numStars; i++) {
+  const r = radius * Math.cbrt(Math.random());
+  const theta = Math.random() * 2 * Math.PI;
+  const phi = Math.acos(2 * Math.random() - 1);
+
+  const x = r * Math.sin(phi) * Math.cos(theta);
+  const y = r * Math.sin(phi) * Math.sin(theta);
+  const z = r * Math.cos(phi);
+
+  starVertices.push(x, y, z);
+}
+
+// Set positions in geometry
+starGeometry.setAttribute('position', new THREE.Float32BufferAttribute(starVertices, 3));
+
+// Create Points object
+const stars = new THREE.Points(starGeometry, starMaterial);
+scene.add(stars);
+
+// Functions
+function moveCamera() {
+  // Get the scroll position
+  const scrollY = window.scrollY || window.pageYOffset;
+
+  // Calculate the maximum scroll value
+  const maxScroll = document.body.scrollHeight - window.innerHeight;
+
+  // Calculate the scroll percentage (0 to 1)
+  scrollPercent = scrollY / maxScroll;
+}
+
+function animate() {
+  requestAnimationFrame(animate);
+
+  const delta = 0.0008;
+  elapsedTime += delta;
+
+  // Moon's orbit
+  const moonOrbitRadius = 40;
+  moon.position.x = earth.position.x + moonOrbitRadius * Math.cos(elapsedTime);
+  moon.position.z = earth.position.z - moonOrbitRadius * Math.sin(elapsedTime);
+
+  // Rotate celestial bodies
+  earth.rotation.y += 0.0008;
+  moon.rotation.y += 0.001;
+  sun.rotation.y += 0.0003;
+
+  // Update sun light position (if the sun moves)
+  sunLight.position.copy(sun.position);
+
+  // Smooth camera zoom based on scroll
+  const minZ = 300;  // Closest zoom
+  const maxZ = 775; // Farthest zoom
+
+  // Calculate the target z-position
+  const targetZ = minZ + (maxZ - minZ) * scrollPercent;
+
+  // Smoothly interpolate camera's z-position
+  camera.position.z += (targetZ - camera.position.z) * 0.05;
+
+  // Keep the camera looking beyond the Earth
+  const lookAtPosition = new THREE.Vector3(
+    earth.position.x,
+    earth.position.y,
+    earth.position.z - 300 // Point beyond the Earth
+  );
+  camera.lookAt(lookAtPosition);
+
+  renderer.render(scene, camera);
+}
 
 // Add event listener for window resize
 window.addEventListener('resize', onWindowResize, false);
 
+function onWindowResize() {
+  // Update camera aspect ratio and projection matrix
+  camera.aspect = window.innerWidth / window.innerHeight;
+  camera.updateProjectionMatrix();
+
+  // Update renderer size
+  renderer.setSize(window.innerWidth, window.innerHeight);
+}
+
 // Camera setup
-camera.position.set(300, -200, 500);
-controls.target.copy(new THREE.Vector3(0, 0, 0)); 
-camera.lookAt(new THREE.Vector3(0, 0, 0));
+camera.position.set(-200, 80, 300); // Move camera left and up
+camera.lookAt(new THREE.Vector3(
+  earth.position.x,
+  earth.position.y,
+  earth.position.z + 500 // Point beyond the Earth
+));
 
 // Event listeners
 document.body.onscroll = moveCamera;
 moveCamera();
 
-// Star generation and animation
-Array(1000).fill().forEach(addStar);
 animate();
+
