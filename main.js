@@ -176,7 +176,7 @@ function animate() {
   const lookAtPosition = new THREE.Vector3(
     earth.position.x,
     earth.position.y,
-    earth.position.z - 300 // Point beyond the Earth
+    earth.position.z - 9000 // Point beyond the Earth
   );
   camera.lookAt(lookAtPosition);
 
@@ -197,11 +197,6 @@ function onWindowResize() {
 
 // Camera setup
 camera.position.set(-200, 80, 300); // Move camera left and up
-camera.lookAt(new THREE.Vector3(
-  earth.position.x,
-  earth.position.y,
-  earth.position.z + 500 // Point beyond the Earth
-));
 
 // Event listeners
 document.body.onscroll = moveCamera;
