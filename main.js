@@ -31,6 +31,31 @@ scene.add(ambientLight);
 const spaceTexture = new THREE.TextureLoader().load('black.jpg');
 scene.background = spaceTexture;
 
+// Load the Milky Way texture
+const milkyWayTexture = new THREE.TextureLoader().load('mw.jpg');
+
+// Create a SpriteMaterial with the Milky Way texture
+const milkyWayMaterial = new THREE.SpriteMaterial({
+  map: milkyWayTexture,
+  transparent: true, 
+  opacity: 0.2, 
+  depthWrite: false, 
+  blending: THREE.AdditiveBlending 
+});
+
+// Create the Sprite
+const milkyWay = new THREE.Sprite(milkyWayMaterial);
+
+// Scale the Sprite 
+milkyWay.scale.set(20000, 12500, 1); 
+
+// Position the Sprite behind other objects
+milkyWay.position.set(0, 800, -4500); 
+
+// Add the Milky Way to the scene
+scene.add(milkyWay);
+// **End of Milky Way Setup**
+
 // Celestial objects
 const sunTexture = new THREE.TextureLoader().load('sun.jpg');
 const earthTexture = new THREE.TextureLoader().load('earth.jpg');
