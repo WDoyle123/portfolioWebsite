@@ -6,7 +6,6 @@ metadata:
   annotations:
     kubernetes.io/ingress.class: "nginx"
     cert-manager.io/cluster-issuer: letsencrypt-prod
-    cert-manager.io/acme-http01-edit-in-place: "true"
 spec:
   ingressClassName: nginx
   tls:
@@ -35,3 +34,4 @@ spec:
             name: portfolio-website-service
             port:
               number: 80
+
