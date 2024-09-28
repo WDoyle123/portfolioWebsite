@@ -4,10 +4,10 @@ metadata:
   name: portfolio-website-ingress
   namespace: portfolio-website
   annotations:
-    nginx.ingress.kubernetes.io/rewrite-target: /
-    cert-manager.io/cluster-issuer: letsencrypt-production
+    kubernetes.io/ingress.class: "nginx"
+    cert-manager.io/cluster-issuer: letsencrypt-prod
 spec:
-  ingressClassName: nginx  
+  ingressClassName: nginx
   tls:
   - hosts:
     - williamdoyle.co.uk
