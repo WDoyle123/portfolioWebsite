@@ -5,14 +5,8 @@ metadata:
   namespace: portfolio-website
   annotations:
     kubernetes.io/ingress.class: "nginx"
-    cert-manager.io/cluster-issuer: letsencrypt-prod
 spec:
   ingressClassName: nginx
-  tls:
-  - hosts:
-    - williamdoyle.co.uk
-    - www.williamdoyle.co.uk
-    secretName: portfolio-website-tls
   rules:
   - host: williamdoyle.co.uk
     http:
