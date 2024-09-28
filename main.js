@@ -58,7 +58,7 @@ scene.add(milkyWay);
 
 // Celestial objects
 const sunTexture = new THREE.TextureLoader().load('sun.jpg');
-const earthTexture = new THREE.TextureLoader().load('earth.jpg');
+const earthTexture = new THREE.TextureLoader().load('earth-new.jpg');
 const moonTexture = new THREE.TextureLoader().load('moon.jpg');
 
 // Sun material with emissiveMap and adjusted emissiveIntensity
