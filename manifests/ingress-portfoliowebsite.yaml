@@ -7,7 +7,7 @@ metadata:
     nginx.ingress.kubernetes.io/rewrite-target: /
     cert-manager.io/cluster-issuer: letsencrypt-production
 spec:
-  ingressClassName: nginx  # Add this line
+  ingressClassName: nginx  
   tls:
   - hosts:
     - williamdoyle.co.uk
