@@ -15,6 +15,6 @@ spec:
     spec:
       containers:
       - name: portfolio-website
-        image: wdoyle123/portfolio-website:1.2.1
+        image: wdoyle123/portfolio-website:1.2.2
         ports:
-        - containerPort: 3000
+        - containerPort: 80
