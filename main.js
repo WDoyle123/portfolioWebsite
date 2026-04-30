@@ -136,11 +136,18 @@ function moveCamera() {
   // Get the scroll position
   const scrollY = window.scrollY || window.pageYOffset;
 
-  // Calculate the maximum scroll value
-  const maxScroll = document.body.scrollHeight - window.innerHeight;
+  // Cross-browser full page height (html { overflow-x: hidden } can make
+  // document.body.scrollHeight return just the viewport height in some browsers)
+  const pageHeight = Math.max(
+    document.body.scrollHeight,
+    document.documentElement.scrollHeight
+  );
 
-  // Calculate the scroll percentage (0 to 1)
-  scrollPercent = scrollY / maxScroll;
+  // Calculate the maximum scroll value
+  const maxScroll = pageHeight - window.innerHeight;
+
+  // Calculate the scroll percentage (0 to 1), clamped to prevent inversion
+  scrollPercent = maxScroll > 0 ? Math.min(1, Math.max(0, scrollY / maxScroll)) : 0;
 }
 
 function animate() {
@@ -162,12 +169,12 @@ function animate() {
   // Update sun light position (if the sun moves)
   sunLight.position.copy(sun.position);
 
-  // Smooth camera zoom based on scroll
-  const minZ = 300;  // Closest zoom
-  const maxZ = 775; // Farthest zoom
+  // Smooth camera zoom based on scroll — camera starts far and approaches Earth
+  const minZ = -900;  // Closest (end of scroll)
+  const maxZ = 200;  // Farthest (start of scroll)
 
-  // Calculate the target z-position
-  const targetZ = minZ + (maxZ - minZ) * scrollPercent;
+  // Calculate the target z-position (inverted: far at top, close at bottom)
+  const targetZ = maxZ - (maxZ - minZ) * scrollPercent;
 
   // Smoothly interpolate camera's z-position
   camera.position.z += (targetZ - camera.position.z) * 0.05;
@@ -196,10 +203,11 @@ function onWindowResize() {
 }
 
 // Camera setup
-camera.position.set(-200, 80, 300); // Move camera left and up
+camera.position.set(-200, 80, 200); // Start far; approaches Earth as user scrolls
 
-// Event listeners
-document.body.onscroll = moveCamera;
+// Event listeners — use window scroll (reliable when html has overflow-x: hidden)
+window.addEventListener('scroll', moveCamera);
+window.addEventListener('resize', moveCamera);
 moveCamera();
 
 animate();
