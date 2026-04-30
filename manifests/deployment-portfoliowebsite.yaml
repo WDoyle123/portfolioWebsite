@@ -15,6 +15,7 @@ spec:
     spec:
       containers:
       - name: portfolio-website
-        image: wdoyle123/portfolio-website:1.2.4
+        image: wdoyle123/portfolio-website:1.2.5
+        imagePullPolicy: Always
         ports:
         - containerPort: 80
