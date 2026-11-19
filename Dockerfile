@@ -1,4 +1,4 @@
-FROM node:current-alpine3.19 AS builder
+FROM docker.io/library/node:current-alpine3.19 AS builder
 
 WORKDIR /app
 
@@ -7,7 +7,7 @@ RUN npm install
 COPY . .
 RUN npm run build
 
-FROM nginx:1.31.9-alpine
+FROM docker.io/library/nginx:1.31.9-alpine
 
 COPY --from=builder /app/dist /usr/share/nginx/html
 

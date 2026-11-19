@@ -13,9 +13,11 @@ spec:
       labels:
         app: portfolio-website
     spec:
+      imagePullSecrets:
+      - name: regcred
       containers:
       - name: portfolio-website
-        image: wdoyle123/portfolio-website:1.2.7
+        image: ${PORTFOLIO_IMAGE_REF}
         imagePullPolicy: Always
         ports:
         - containerPort: 80
