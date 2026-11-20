@@ -1,0 +1,8 @@
+.git
+.ci
+.ci-*
+.local
+.config
+node_modules
+dist
+build_script.sh
